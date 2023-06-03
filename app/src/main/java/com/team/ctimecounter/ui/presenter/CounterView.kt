@@ -69,9 +69,9 @@ fun CounterView(vm: CounterVM) {
                     bottom.linkTo(parent.bottom)
                 }, onClick = vm::toggleCounter) {
                     val img = if (vm.isTimerRunning.value) {
-                        painterResource(R.drawable.ic_pause)
+                        painterResource(R.drawable.ic_pause_24)
                     } else {
-                        painterResource(R.drawable.ic_play)
+                        painterResource(R.drawable.ic_play_24)
                     }
                     Image(painter = img, modifier = Modifier.fillMaxSize(),
                         contentDescription = null, contentScale = ContentScale.Crop)
