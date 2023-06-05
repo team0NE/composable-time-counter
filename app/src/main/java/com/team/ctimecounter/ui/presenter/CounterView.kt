@@ -21,7 +21,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.team.ctimecounter.R
 
 @Composable
-fun CounterView(vm: CounterVM) {
+fun CounterView(vm: CounterVM, showSnackBar: (action: String) -> Unit) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (min, sep, sec, startBtn, saveBTN, resetBTN) = createRefs()
 
@@ -69,9 +69,9 @@ fun CounterView(vm: CounterVM) {
                     bottom.linkTo(parent.bottom)
                 }, onClick = vm::toggleCounter) {
                     val img = if (vm.isTimerRunning.value) {
-                        painterResource(R.drawable.ic_pause)
+                        painterResource(R.drawable.ic_pause_24)
                     } else {
-                        painterResource(R.drawable.ic_play)
+                        painterResource(R.drawable.ic_play_24)
                     }
                     Image(painter = img, modifier = Modifier.fillMaxSize(),
                         contentDescription = null, contentScale = ContentScale.Crop)
@@ -86,9 +86,13 @@ fun CounterView(vm: CounterVM) {
                     start.linkTo(parent.start)
                     bottom.linkTo(parent.bottom)
                 },
-            onClick = vm::saveRemainingTime) {
+            onClick = {
+                vm.saveRemainingTime()
+                showSnackBar("save")
+            }) {
             Image( painter = painterResource(R.drawable.ic_save),
-                contentDescription = "content description", contentScale = ContentScale.Crop)
+                contentDescription = "content description",
+                contentScale = ContentScale.Crop)
         }
 
         Button(
@@ -100,10 +104,14 @@ fun CounterView(vm: CounterVM) {
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                 },
-            onClick = vm::resetRemainingTime) {
+            onClick = {
+                vm.resetRemainingTime()
+                showSnackBar("reset")
+            }) {
             Image( painter = painterResource(R.drawable.ic_reset),
                 modifier = Modifier.fillMaxSize(),
-                contentDescription = "content description", contentScale = ContentScale.Crop)
+                contentDescription = "content description",
+                contentScale = ContentScale.Crop)
         }
     }
 }
