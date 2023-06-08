@@ -1,4 +1,4 @@
-package com.team.ctimecounter.ui.presenter.util
+package com.team.ctimecounter.ui.util
 
 import androidx.compose.material3.SnackbarHostState
 import kotlinx.coroutines.CoroutineScope

@@ -1,12 +1,12 @@
-package com.team.ctimecounter.ui.presenter
+package com.team.ctimecounter.ui.views
 
-import android.app.Application
 import android.media.MediaPlayer
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.team.ctimecounter.R
+import com.team.ctimecounter.ui.BaseApplication
 import com.team.ctimecounter.utils.PrefsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CounterVM
     @Inject constructor
-    (app: Application, private val prefsManager: PrefsManager): ViewModel() {
+    (app: BaseApplication, private val prefsManager: PrefsManager): ViewModel() {
     val minutes: MutableState<Int> = mutableStateOf(0)
     val seconds: MutableState<Int> = mutableStateOf(0)
     val sepView: MutableState<String> = mutableStateOf(":")
