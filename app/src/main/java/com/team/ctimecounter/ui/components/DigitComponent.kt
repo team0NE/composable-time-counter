@@ -1,4 +1,4 @@
-package com.team.ctimecounter.ui.presenter
+package com.team.ctimecounter.ui.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun DigitView(value: Int, modifier: Modifier, onClick: () -> Unit) {
+fun DigitComponent(value: Int, modifier: Modifier, onClick: () -> Unit) {
     val str = if (value < 10) {
         "0$value"
     } else {

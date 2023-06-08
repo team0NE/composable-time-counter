@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">compose timer</string>
+    <string name="app_theme_label">Theme</string>
+    <string name="app_chain_label">Time\'s chain settings</string>
 </resources>

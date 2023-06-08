@@ -1,4 +1,4 @@
-package com.team.ctimecounter.ui.presenter
+package com.team.ctimecounter.ui.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,11 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.team.ctimecounter.R
+import com.team.ctimecounter.ui.components.DigitComponent
 
 @Composable
 fun CounterView(vm: CounterVM, showSnackBar: (action: String) -> Unit) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (min, sep, sec, startBtn, saveBTN, resetBTN) = createRefs()
+        val topGuideLine = createGuidelineFromTop(.3f)
+        val bottomGuideLine = createGuidelineFromBottom(.15f)
 
         Text(text = vm.sepView.value,
             style = TextStyle(
@@ -32,12 +35,11 @@ fun CounterView(vm: CounterVM, showSnackBar: (action: String) -> Unit) {
             ),
             modifier = Modifier.constrainAs(sep) {
             start.linkTo(parent.start)
-            top.linkTo(parent.top)
+            top.linkTo(topGuideLine)
             end.linkTo(parent.end)
-            bottom.linkTo(parent.bottom)
         })
 
-        DigitView(value = vm.minutes.value, modifier = Modifier
+        DigitComponent(value = vm.minutes.value, modifier = Modifier
             .padding(end = 8.dp)
             .constrainAs(min) {
                 top.linkTo(sep.top)
@@ -47,7 +49,7 @@ fun CounterView(vm: CounterVM, showSnackBar: (action: String) -> Unit) {
             vm.increaseTime(60)
         }
 
-        DigitView(value = vm.seconds.value, modifier = Modifier
+        DigitComponent(value = vm.seconds.value, modifier = Modifier
             .padding(start = 8.dp)
             .constrainAs(sec) {
                 start.linkTo(sep.end)
@@ -59,15 +61,16 @@ fun CounterView(vm: CounterVM, showSnackBar: (action: String) -> Unit) {
 
         Button(
             modifier = Modifier
-                .requiredHeight(100.dp)
-                .requiredWidth(100.dp)
+                .requiredHeight(150.dp)
+                .requiredWidth(150.dp)
                 .clip(CircleShape)
                 .constrainAs(startBtn) {
                     start.linkTo(parent.start)
                     top.linkTo(sep.bottom)
                     end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }, onClick = vm::toggleCounter) {
+                    bottom.linkTo(bottomGuideLine)
+                },
+            onClick = vm::toggleCounter) {
                     val img = if (vm.isTimerRunning.value) {
                         painterResource(R.drawable.ic_pause_24)
                     } else {
@@ -84,13 +87,13 @@ fun CounterView(vm: CounterVM, showSnackBar: (action: String) -> Unit) {
                 .padding(8.dp)
                 .constrainAs(saveBTN) {
                     start.linkTo(parent.start)
-                    bottom.linkTo(parent.bottom)
+                    bottom.linkTo(bottomGuideLine)
                 },
             onClick = {
                 vm.saveRemainingTime()
                 showSnackBar("save")
             }) {
-            Image( painter = painterResource(R.drawable.ic_save),
+            Image( painter = painterResource(R.drawable.ic_save_black_24),
                 contentDescription = "content description",
                 contentScale = ContentScale.Crop)
         }
@@ -102,13 +105,13 @@ fun CounterView(vm: CounterVM, showSnackBar: (action: String) -> Unit) {
                 .padding(8.dp)
                 .constrainAs(resetBTN) {
                     end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
+                    bottom.linkTo(bottomGuideLine)
                 },
             onClick = {
                 vm.resetRemainingTime()
                 showSnackBar("reset")
             }) {
-            Image( painter = painterResource(R.drawable.ic_reset),
+            Image( painter = painterResource(R.drawable.ic_reset_black_24),
                 modifier = Modifier.fillMaxSize(),
                 contentDescription = "content description",
                 contentScale = ContentScale.Crop)
