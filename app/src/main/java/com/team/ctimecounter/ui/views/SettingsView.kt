@@ -48,7 +48,7 @@ fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
                 })
-        DisplayThemeSpinnerComponent(app, parentOptions = listOf("Dark", "Light"),
+        DisplayThemeSpinnerComponent(app, parentOptions = listOf("DarkTheme", "LightTheme"),
             modifier = Modifier
                 .padding(start = 8.dp)
                 .constrainAs(themeSpinner) {

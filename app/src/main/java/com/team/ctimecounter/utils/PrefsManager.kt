@@ -26,4 +26,17 @@ class PrefsManager constructor(app: Application) {
             time
         }
     }
+
+    suspend fun saveTheme(value: String) {
+        dataStore.edit { pref ->
+            pref[savingThemeKey] = value
+        }
+    }
+
+    fun getSavedTheme(): Flow<String?> {
+        return dataStore.data.map { pref ->
+            val theme = pref[savingThemeKey] ?: "LightTheme"
+            theme
+        }
+    }
 }
