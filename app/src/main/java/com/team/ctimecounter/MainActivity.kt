@@ -24,9 +24,12 @@ import com.team.ctimecounter.ui.views.CounterVM
 import com.team.ctimecounter.ui.util.SnackbarController
 import com.team.ctimecounter.ui.theme.CTimeCounterTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var application: BaseApplication
     private val snackbarController = SnackbarController(lifecycleScope)
     @OptIn(ExperimentalMaterial3Api::class)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -37,7 +40,7 @@ class MainActivity : ComponentActivity() {
             val snackbarHostState = remember { SnackbarHostState() }
             val navController = rememberNavController()
 
-            CTimeCounterTheme {
+            CTimeCounterTheme(application.isDark.value) {
                 // A surface container using the 'background' color from the theme
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
@@ -60,7 +63,7 @@ class MainActivity : ComponentActivity() {
                     }
                 ){
                     Navigation(
-                        app = application as BaseApplication,
+                        app = application,
                         vm = vm,
                         navController = navController,
                         snackbarController = snackbarController,

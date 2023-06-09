@@ -16,7 +16,13 @@ import com.team.ctimecounter.ui.BaseApplication
 @Composable
 fun DisplayThemeSpinnerComponent(app: BaseApplication, parentOptions: List<String>, modifier: Modifier) {
     val expandedState = remember { mutableStateOf(false) }
-    val selectedOption = remember { mutableStateOf(parentOptions[0]) }
+    val selectedOption = remember { mutableStateOf(
+        if (app.isDark.value) {
+            parentOptions[0]
+        } else {
+            parentOptions[1]
+        }
+    )}
 
     ExposedDropdownMenuBox(expanded = expandedState.value, onExpandedChange = {
         expandedState.value = !expandedState.value
@@ -35,6 +41,7 @@ fun DisplayThemeSpinnerComponent(app: BaseApplication, parentOptions: List<Strin
                 }, onClick = {
                     selectedOption.value = option
                     expandedState.value = false
+                    app.switchTheme(option, false)
                 })
             }
         }
