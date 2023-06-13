@@ -22,7 +22,7 @@ class CounterVM
     val seconds: MutableState<Int> = mutableStateOf(0)
     val sepView: MutableState<String> = mutableStateOf(":")
     val isTimerRunning = mutableStateOf(false)
-    private val isSepShown = mutableStateOf(true)
+    val isSepShown = mutableStateOf(true)
     private var timeInSeconds: Int = 0
     private val tickingPlayer = MediaPlayer.create(app.applicationContext, R.raw.clock)
     private val finishPlayer = MediaPlayer.create(app.applicationContext, R.raw.stop)
@@ -72,9 +72,7 @@ class CounterVM
     private fun converting(totalSecs: Int) {
         minutes.value = (totalSecs % 3600) / 60
         seconds.value = totalSecs % 60
-
         isSepShown.value = !isSepShown.value
-        sepView.value = if (isSepShown.value) ":" else " "
     }
 
     private fun playTicking() {

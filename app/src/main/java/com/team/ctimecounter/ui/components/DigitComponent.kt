@@ -30,7 +30,7 @@ fun DigitComponent(value: Int, modifier: Modifier, onClick: () -> Unit) {
             Text(
                 text = str,
                 style = TextStyle(
-                    fontSize = 42.sp,
+                    fontSize = 96.sp,
                     fontWeight = FontWeight.Bold
                 ), modifier = Modifier.clickable(true, onClick = onClick))
         }
