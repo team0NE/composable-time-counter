@@ -22,6 +22,7 @@ import com.team.ctimecounter.ui.BaseApplication
 import com.team.ctimecounter.ui.components.AlertComponent
 import com.team.ctimecounter.ui.components.DisplayThemeSpinnerComponent
 import com.team.ctimecounter.ui.components.TimeChainComponent
+import com.team.ctimecounter.ui.util.chooseInfoImage
 
 @Composable
 fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
@@ -67,7 +68,7 @@ fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
                     top.linkTo(themeSpinner.bottom)
                 })
 
-        Image(painter = painterResource(id = R.drawable.ic_info_black_24),
+        Image(painter = painterResource(chooseInfoImage(app.isDark.value)),
             contentDescription = "",
             modifier = Modifier
                 .padding(start = 8.dp)
@@ -93,5 +94,6 @@ fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
             // save time chain to dataStore
         }
         // Add bottom bar icon size picker 24-36-48
+        // add bottom bar view chooser -> classic(3 routes), modern(2 buttons + centered fab)
     }
 }
