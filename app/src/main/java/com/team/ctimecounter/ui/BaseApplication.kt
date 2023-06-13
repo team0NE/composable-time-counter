@@ -12,8 +12,10 @@ import javax.inject.Inject
 @HiltAndroidApp
 class BaseApplication: Application() {
     // should be saved in datastore or cache
-    var isDark = mutableStateOf(false)
-    var iconSize = mutableStateOf("Small")
+    val isDark = mutableStateOf(false)
+    val iconSize = mutableStateOf("Small")
+    val navigationView = mutableStateOf("Classic")
+    val chosenTab = mutableStateOf(0)
     private val applicationScope = MainScope()
     @Inject lateinit var prefsManager: PrefsManager
 
@@ -21,8 +23,10 @@ class BaseApplication: Application() {
         applicationScope.launch {
             val theme = prefsManager.getSavedTheme().first() ?: "LightTheme"
             val iconSize = prefsManager.getSavedIconSize().first() ?: "Medium"
+            val navView = prefsManager.getSavedNavigationView().first() ?: "Classic"
             switchTheme(theme, true)
             switchIconSize(iconSize, true)
+            switchNavigationView(navView, true)
         }
     }
 
@@ -39,6 +43,14 @@ class BaseApplication: Application() {
         if (!isInitCall) {
             applicationScope.launch {
                 prefsManager.saveIconSize(size)
+            }
+        }
+    }
+    fun switchNavigationView(view: String, isInitCall: Boolean) {
+        navigationView.value = view
+        if (!isInitCall) {
+            applicationScope.launch {
+                prefsManager.saveNavigationView(view)
             }
         }
     }

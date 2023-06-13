@@ -10,15 +10,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.team.ctimecounter.ui.BaseApplication
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavIconSizeSpinnerComponent(app: BaseApplication, modifier: Modifier){
+fun NavIconSizeSpinnerComponent(iconSize: String,
+                                modifier: Modifier,
+                                onSizePicked: (String) -> Unit
+){
     val parentOptions = listOf("Small", "Medium", "Large")
     val expandedState = remember { mutableStateOf(false) }
     val selectedOption = remember { mutableStateOf(
-        when(app.iconSize.value) {
+        when(iconSize) {
             "Small" -> parentOptions[0]
             "Medium" -> parentOptions[1]
             "Large" -> parentOptions[2]
@@ -44,7 +46,7 @@ fun NavIconSizeSpinnerComponent(app: BaseApplication, modifier: Modifier){
                 }, onClick = {
                     selectedOption.value = option
                     expandedState.value = false
-                    app.switchIconSize(option, false)
+                    onSizePicked(option)
                 })
             }
         }

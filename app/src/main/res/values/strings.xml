@@ -3,4 +3,5 @@
     <string name="app_theme_label">Theme</string>
     <string name="app_chain_label">Time\'s chain settings</string>
     <string name="app_icon_size_label">Navigation bar icon size</string>
+    <string name="app_navigation_view_label">Navigation bar view</string>
 </resources>
