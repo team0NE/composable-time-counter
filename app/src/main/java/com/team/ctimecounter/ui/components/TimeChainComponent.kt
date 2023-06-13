@@ -33,7 +33,7 @@ fun TimeChainComponent(modifier: Modifier, onSaveClick: (String?) -> Unit) {
             time.value = timeValue
             // close keyboard
         })
-        Button(modifier = Modifier.padding(start = 8.dp), onClick = {
+        Button(modifier = Modifier.padding(start = 16.dp), onClick = {
             onSaveClick("${multiplier.value}x${time.value}")
         }) {
             Image( painter = painterResource(R.drawable.ic_save_black_24),

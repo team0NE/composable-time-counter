@@ -18,25 +18,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Visibility
 import com.team.ctimecounter.R
 import com.team.ctimecounter.ui.components.DigitComponent
 
 @Composable
 fun CounterView(vm: CounterVM, showSnackBar: (action: String) -> Unit) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (min, sep, sec, startBtn, saveBTN, resetBTN) = createRefs()
-        val topGuideLine = createGuidelineFromTop(.3f)
+        val (min, sep, sec, startBtn, saveBTN, resetBTN, div) = createRefs()
+        val topGuideLine = createGuidelineFromTop(.35f)
         val bottomGuideLine = createGuidelineFromBottom(.15f)
 
         Text(text = vm.sepView.value,
             style = TextStyle(
-                fontSize = 42.sp,
+                fontSize = 96.sp,
                 fontWeight = FontWeight.Bold
             ),
-            modifier = Modifier.constrainAs(sep) {
-            start.linkTo(parent.start)
-            top.linkTo(topGuideLine)
-            end.linkTo(parent.end)
+            modifier = Modifier
+                .constrainAs(sep) {
+                    visibility = if (vm.isSepShown.value) Visibility.Visible else Visibility.Invisible
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(topGuideLine)
         })
 
         DigitComponent(value = vm.minutes.value, modifier = Modifier
@@ -58,6 +62,13 @@ fun CounterView(vm: CounterVM, showSnackBar: (action: String) -> Unit) {
             }) {
             vm.increaseTime(5)
         }
+// Just a hint to see topGuideLine
+/*        Divider(
+            modifier = Modifier.constrainAs(div) {
+                bottom.linkTo(topGuideLine)
+            },
+            color = Color.Blue,
+            thickness = 1.dp)*/
 
         Button(
             modifier = Modifier
@@ -66,7 +77,7 @@ fun CounterView(vm: CounterVM, showSnackBar: (action: String) -> Unit) {
                 .clip(CircleShape)
                 .constrainAs(startBtn) {
                     start.linkTo(parent.start)
-                    top.linkTo(sep.bottom)
+                    top.linkTo(topGuideLine)
                     end.linkTo(parent.end)
                     bottom.linkTo(bottomGuideLine)
                 },

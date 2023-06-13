@@ -32,11 +32,33 @@ class PrefsManager constructor(app: Application) {
             pref[savingThemeKey] = value
         }
     }
+    suspend fun saveIconSize(value: String) {
+        dataStore.edit { pref ->
+            pref[savingIconSizeKey] = value
+        }
+    }
+    suspend fun saveNavigationView(view: String) {
+        dataStore.edit { pref ->
+            pref[savingNavigationViewKey] = view
+        }
+    }
 
     fun getSavedTheme(): Flow<String?> {
         return dataStore.data.map { pref ->
             val theme = pref[savingThemeKey] ?: "LightTheme"
             theme
+        }
+    }
+    fun getSavedIconSize(): Flow<String?> {
+        return dataStore.data.map { pref ->
+            val iconSize = pref[savingIconSizeKey] ?: "Medium"
+            iconSize
+        }
+    }
+    fun getSavedNavigationView(): Flow<String?> {
+        return dataStore.data.map { pref ->
+            val iconSize = pref[savingNavigationViewKey] ?: "Classic"
+            iconSize
         }
     }
 }

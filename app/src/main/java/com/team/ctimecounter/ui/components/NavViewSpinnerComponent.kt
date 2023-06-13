@@ -13,18 +13,15 @@ import androidx.compose.ui.Modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayThemeSpinnerComponent(isDark: Boolean,
-                                 parentOptions: List<String>,
-                                 modifier: Modifier,
-                                 onThemePicked: (String) -> Unit) {
+fun NavViewSpinnerComponent(navigationView: String, modifier: Modifier, onViewPicked: (String) -> Unit) {
+    val parentOptions = listOf("Classic", "Modern")
     val expandedState = remember { mutableStateOf(false) }
     val selectedOption = remember { mutableStateOf(
-        if (isDark) {
-            parentOptions[0]
-        } else {
-            parentOptions[1]
-        }
-    )}
+        when(navigationView) {
+            "Classic" -> parentOptions[0]
+            "Modern" -> parentOptions[1]
+            else -> parentOptions[0]
+        }) }
 
     ExposedDropdownMenuBox(expanded = expandedState.value, onExpandedChange = {
         expandedState.value = !expandedState.value
@@ -32,7 +29,8 @@ fun DisplayThemeSpinnerComponent(isDark: Boolean,
         TextField(value = selectedOption.value,
             onValueChange = {
             },
-            modifier = Modifier.menuAnchor(),
+            modifier = Modifier
+                .menuAnchor(),
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedState.value) },
             readOnly = true)
 
@@ -43,7 +41,7 @@ fun DisplayThemeSpinnerComponent(isDark: Boolean,
                 }, onClick = {
                     selectedOption.value = option
                     expandedState.value = false
-                    onThemePicked(option)
+                    onViewPicked(option)
                 })
             }
         }

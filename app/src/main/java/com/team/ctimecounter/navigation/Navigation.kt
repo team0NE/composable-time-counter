@@ -2,6 +2,8 @@ package com.team.ctimecounter.navigation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.SnackbarHostState
@@ -11,15 +13,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.team.ctimecounter.ui.BaseApplication
+import com.team.ctimecounter.ui.util.SnackbarController
+import com.team.ctimecounter.ui.util.iconSizePicker
 import com.team.ctimecounter.ui.views.CounterVM
 import com.team.ctimecounter.ui.views.CounterView
 import com.team.ctimecounter.ui.views.SettingsView
-import com.team.ctimecounter.ui.util.SnackbarController
 import kotlinx.coroutines.launch
 
 @Composable
@@ -68,13 +72,15 @@ fun Navigation(app: BaseApplication,
 }
 
 @Composable
-fun BottomNavigationBar(items: List<BottomNavItem>,
-                        navController: NavHostController,
-                        modifier: Modifier,
-                        snackbarController: SnackbarController,
-                        snackbarHostState: SnackbarHostState
+fun ClassicBottomNavigationBar(items: List<BottomNavItem>,
+                               chosenTab: Int,
+                               navController: NavHostController,
+                               modifier: Modifier,
+                               snackbarController: SnackbarController,
+                               snackbarHostState: SnackbarHostState,
+                               onTabSelected: (Int) -> Unit
 ) {
-    val selectedItem = remember { mutableStateOf(0) }
+    val selectedItem = remember { mutableStateOf(chosenTab) }
     NavigationBar(
         modifier = modifier
             .background(Color.DarkGray)
@@ -95,6 +101,7 @@ fun BottomNavigationBar(items: List<BottomNavItem>,
                     } else {
                         selectedItem.value = index
                         navController.navigate(item.route)
+                        onTabSelected(index)
                     }
                 },
                 icon = {
@@ -105,4 +112,57 @@ fun BottomNavigationBar(items: List<BottomNavItem>,
             })
         }
     }
+}
+
+@Composable
+fun ModernBottomNavigationBar(items: List<BottomNavItem>,
+                              chosenTab: Int,
+                               iconSize: String,
+                               navController: NavHostController,
+                               snackbarController: SnackbarController,
+                               snackbarHostState: SnackbarHostState,
+                               onTabSelected: (Int) -> Unit
+) {
+    val selectedItem = remember { mutableStateOf(chosenTab) }
+
+    BottomAppBar(actions = {
+        items.forEachIndexed { index, item ->
+            NavigationBarItem(
+                selected = selectedItem.value == index,
+                onClick = {
+                    if (index == 1) {
+                        snackbarController.getScope().launch {
+                            snackbarController.showSnackbar(
+                                snackbarHostState = snackbarHostState,
+                                message = "This feature is under construction",
+                                actionLabel = "Ok"
+                            )
+                        }
+                    } else {
+                        selectedItem.value = index
+                        navController.navigate(item.route)
+                        onTabSelected(index)
+                    }
+                },
+                icon = {
+                    Image(
+                        painter = item.image,
+                        contentDescription = "${item.name} Icon",
+                    )
+                })
+        }
+    },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                navController.navigate(Routes.SettingsRoute.route)
+                selectedItem.value = 2
+                onTabSelected(2)
+            }) {
+                Image(
+                    painterResource(
+                        iconSizePicker(iconSize,
+                    Routes.SettingsRoute.route)
+                    ), contentDescription = "")
+            }
+        },)
 }
