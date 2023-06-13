@@ -23,6 +23,7 @@ import com.team.ctimecounter.ui.BaseApplication
 import com.team.ctimecounter.ui.views.CounterVM
 import com.team.ctimecounter.ui.util.SnackbarController
 import com.team.ctimecounter.ui.theme.CTimeCounterTheme
+import com.team.ctimecounter.ui.util.iconSizePicker
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -49,11 +50,11 @@ class MainActivity : ComponentActivity() {
                         BottomNavigationBar(
                             items = listOf(
                                 BottomNavItem(name = Routes.TimerRoute.route, route = Routes.TimerRoute.route,
-                                    image = painterResource(R.drawable.ic_timer_black_36)),
+                                    image = painterResource(iconSizePicker(application.iconSize.value, Routes.TimerRoute.route))),
                                 BottomNavItem(name = Routes.TimerListRoute.route, route = Routes.TimerListRoute.route,
-                                    image = painterResource(R.drawable.ic_list_black_36)),
+                                    image = painterResource(iconSizePicker(application.iconSize.value, Routes.TimerListRoute.route))),
                                 BottomNavItem(name = Routes.SettingsRoute.route, route = Routes.SettingsRoute.route,
-                                    image = painterResource(R.drawable.ic_settings_black_36))
+                                    image = painterResource(iconSizePicker(application.iconSize.value, Routes.SettingsRoute.route)))
                             ),
                             navController = navController,
                             modifier = Modifier,

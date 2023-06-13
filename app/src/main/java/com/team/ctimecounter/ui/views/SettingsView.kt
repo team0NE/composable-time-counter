@@ -21,6 +21,7 @@ import com.team.ctimecounter.R
 import com.team.ctimecounter.ui.BaseApplication
 import com.team.ctimecounter.ui.components.AlertComponent
 import com.team.ctimecounter.ui.components.DisplayThemeSpinnerComponent
+import com.team.ctimecounter.ui.components.NavIconSizeSpinnerComponent
 import com.team.ctimecounter.ui.components.TimeChainComponent
 import com.team.ctimecounter.ui.util.chooseInfoImage
 
@@ -30,7 +31,7 @@ fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
-        val (themeLabel, themeSpinner, chainLabel, languageSpinner, infoBTN) = createRefs()
+        val (themeLabel, themeSpinner, chainLabel, timeChainSpinner, infoBTN, sizeLabel, sizeSpinner) = createRefs()
         val showDialog = remember { mutableStateOf(false) }
         if (showDialog.value) {
             AlertComponent(msg = "The time chain is used when it is necessary to repeat the specified time n times",
@@ -75,18 +76,18 @@ fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
                 .clickable(true) {
                     showDialog.value = true
                 }
-                .constrainAs(infoBTN){
-                start.linkTo(chainLabel.end)
-                top.linkTo(chainLabel.top)
-                bottom.linkTo(chainLabel.bottom)
-            }
+                .constrainAs(infoBTN) {
+                    start.linkTo(chainLabel.end)
+                    top.linkTo(chainLabel.top)
+                    bottom.linkTo(chainLabel.bottom)
+                }
         )
 
         TimeChainComponent(
             modifier = Modifier
                 .padding(start = 8.dp)
                 .fillMaxWidth(.9f)
-                .constrainAs(languageSpinner) {
+                .constrainAs(timeChainSpinner) {
                     start.linkTo(parent.start)
                     top.linkTo(chainLabel.bottom)
                 }) { timeChain ->
@@ -94,6 +95,23 @@ fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
             // save time chain to dataStore
         }
         // Add bottom bar icon size picker 24-36-48
+        Text(text = stringResource(id = R.string.app_icon_size_label),
+            style = TextStyle(
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier
+                .padding(start = 8.dp, top = 8.dp)
+                .constrainAs(sizeLabel) {
+                    start.linkTo(parent.start)
+                    top.linkTo(timeChainSpinner.bottom)
+                })
+        NavIconSizeSpinnerComponent(app = app, modifier = Modifier
+            .padding(start = 8.dp, top = 8.dp)
+            .constrainAs(sizeSpinner) {
+                start.linkTo(parent.start)
+                top.linkTo(sizeLabel.bottom)
+            })
         // add bottom bar view chooser -> classic(3 routes), modern(2 buttons + centered fab)
     }
 }
