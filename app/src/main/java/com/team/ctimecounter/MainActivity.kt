@@ -49,11 +49,11 @@ class MainActivity : ComponentActivity() {
                         BottomNavigationBar(
                             items = listOf(
                                 BottomNavItem(name = Routes.TimerRoute.route, route = Routes.TimerRoute.route,
-                                    image = painterResource(R.drawable.ic_timer_black_48)),
+                                    image = painterResource(R.drawable.ic_timer_black_36)),
                                 BottomNavItem(name = Routes.TimerListRoute.route, route = Routes.TimerListRoute.route,
-                                    image = painterResource(R.drawable.ic_list_black_48)),
+                                    image = painterResource(R.drawable.ic_list_black_36)),
                                 BottomNavItem(name = Routes.SettingsRoute.route, route = Routes.SettingsRoute.route,
-                                    image = painterResource(R.drawable.ic_settings_black_48))
+                                    image = painterResource(R.drawable.ic_settings_black_36))
                             ),
                             navController = navController,
                             modifier = Modifier,

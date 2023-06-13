@@ -92,5 +92,6 @@ fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
             showSnackbar(timeChain.toString())
             // save time chain to dataStore
         }
+        // Add bottom bar icon size picker 24-36-48
     }
 }

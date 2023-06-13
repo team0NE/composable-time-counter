@@ -16,10 +16,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.team.ctimecounter.ui.BaseApplication
+import com.team.ctimecounter.ui.util.SnackbarController
 import com.team.ctimecounter.ui.views.CounterVM
 import com.team.ctimecounter.ui.views.CounterView
 import com.team.ctimecounter.ui.views.SettingsView
-import com.team.ctimecounter.ui.util.SnackbarController
 import kotlinx.coroutines.launch
 
 @Composable
