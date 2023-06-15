@@ -18,23 +18,23 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.team.ctimecounter.ui.BaseApplication
 import com.team.ctimecounter.ui.util.SnackbarController
 import com.team.ctimecounter.ui.util.iconSizePicker
 import com.team.ctimecounter.ui.views.CounterVM
 import com.team.ctimecounter.ui.views.CounterView
+import com.team.ctimecounter.ui.views.SettingsVM
 import com.team.ctimecounter.ui.views.SettingsView
 import kotlinx.coroutines.launch
 
 @Composable
-fun Navigation(app: BaseApplication,
-               vm: CounterVM,
+fun Navigation(counterVM: CounterVM,
+               settingsVM: SettingsVM,
                navController: NavHostController,
                snackbarController: SnackbarController,
                snackbarHostState: SnackbarHostState){
     NavHost(navController = navController, startDestination = Routes.TimerRoute.route) {
         composable(route=Routes.TimerRoute.route) {
-            CounterView(vm) { actionName ->
+            CounterView(counterVM) { actionName ->
                 when(actionName) {
                     "save" -> {
                         snackbarController.getScope().launch {
@@ -58,7 +58,7 @@ fun Navigation(app: BaseApplication,
             }
         }
         composable(route = Routes.SettingsRoute.route) {
-            SettingsView(app = app) { testValue ->
+            SettingsView(settingsVM = settingsVM) { testValue ->
                 snackbarController.getScope().launch {
                     snackbarController.showSnackbar(
                         snackbarHostState = snackbarHostState,

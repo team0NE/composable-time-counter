@@ -3,6 +3,7 @@ package com.team.ctimecounter.ui
 import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import com.team.ctimecounter.utils.PrefsManager
+import com.team.ctimecounter.utils.UpdateKey
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.first
@@ -11,11 +12,9 @@ import javax.inject.Inject
 
 @HiltAndroidApp
 class BaseApplication: Application() {
-    // should be saved in datastore or cache
-    val isDark = mutableStateOf(false)
-    val iconSize = mutableStateOf("Small")
-    val navigationView = mutableStateOf("Classic")
-    val chosenTab = mutableStateOf(0)
+    private val isDark = mutableStateOf(false)
+    private val iconSize = mutableStateOf("Small")
+    private val navigationView = mutableStateOf("Classic")
     private val applicationScope = MainScope()
     @Inject lateinit var prefsManager: PrefsManager
 
@@ -24,33 +23,32 @@ class BaseApplication: Application() {
             val theme = prefsManager.getSavedTheme().first() ?: "LightTheme"
             val iconSize = prefsManager.getSavedIconSize().first() ?: "Medium"
             val navView = prefsManager.getSavedNavigationView().first() ?: "Classic"
-            switchTheme(theme, true)
-            switchIconSize(iconSize, true)
-            switchNavigationView(navView, true)
+            switchTheme(theme)
+            switchIconSize(iconSize)
+            switchNavigationView(navView)
         }
     }
 
-    fun switchTheme(theme: String, isInitCall: Boolean) {
+    private fun switchTheme(theme: String) {
         isDark.value = theme == "DarkTheme"
-        if (!isInitCall) {
-            applicationScope.launch {
-                prefsManager.saveTheme(theme)
-            }
-        }
     }
-    fun switchIconSize(size: String, isInitCall: Boolean) {
+    private fun switchIconSize(size: String) {
         iconSize.value = size
-        if (!isInitCall) {
-            applicationScope.launch {
-                prefsManager.saveIconSize(size)
-            }
-        }
     }
-    fun switchNavigationView(view: String, isInitCall: Boolean) {
+    private fun switchNavigationView(view: String) {
         navigationView.value = view
-        if (!isInitCall) {
-            applicationScope.launch {
-                prefsManager.saveNavigationView(view)
+    }
+
+    fun updateView(key: UpdateKey, value: String) {
+        when(key) {
+            UpdateKey.ThemeKey -> {
+                switchTheme(value)
+            }
+            UpdateKey.SizeKey -> {
+                switchIconSize(value)
+            }
+            UpdateKey.NavKey -> {
+                switchNavigationView(value)
             }
         }
     }

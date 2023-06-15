@@ -20,74 +20,72 @@ import com.team.ctimecounter.navigation.ClassicBottomNavigationBar
 import com.team.ctimecounter.navigation.ModernBottomNavigationBar
 import com.team.ctimecounter.navigation.Navigation
 import com.team.ctimecounter.navigation.Routes
-import com.team.ctimecounter.ui.BaseApplication
 import com.team.ctimecounter.ui.theme.CTimeCounterTheme
 import com.team.ctimecounter.ui.util.SnackbarController
 import com.team.ctimecounter.ui.util.iconSizePicker
 import com.team.ctimecounter.ui.views.CounterVM
+import com.team.ctimecounter.ui.views.SettingsVM
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var application: BaseApplication
     private val snackbarController = SnackbarController(lifecycleScope)
     @OptIn(ExperimentalMaterial3Api::class)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val vm: CounterVM by viewModels()
+            val counterVM: CounterVM by viewModels()
+            val settingsVM: SettingsVM by viewModels()
             val snackbarHostState = remember { SnackbarHostState() }
             val navController = rememberNavController()
 
-            CTimeCounterTheme(application.isDark.value) {
+            CTimeCounterTheme(settingsVM.isDark.value) {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
                     bottomBar = {
-                        if (application.navigationView.value == "Classic") {
+                        if (settingsVM.navigationView.value == "Classic") {
                             ClassicBottomNavigationBar(
                                 items = listOf(
                                     BottomNavItem(name = Routes.TimerRoute.route, route = Routes.TimerRoute.route,
-                                        image = painterResource(iconSizePicker(application.iconSize.value, Routes.TimerRoute.route))),
+                                        image = painterResource(iconSizePicker(settingsVM.iconSize.value, Routes.TimerRoute.route))),
                                     BottomNavItem(name = Routes.TimerListRoute.route, route = Routes.TimerListRoute.route,
-                                        image = painterResource(iconSizePicker(application.iconSize.value, Routes.TimerListRoute.route))),
+                                        image = painterResource(iconSizePicker(settingsVM.iconSize.value, Routes.TimerListRoute.route))),
                                     BottomNavItem(name = Routes.SettingsRoute.route, route = Routes.SettingsRoute.route,
-                                        image = painterResource(iconSizePicker(application.iconSize.value, Routes.SettingsRoute.route)))
+                                        image = painterResource(iconSizePicker(settingsVM.iconSize.value, Routes.SettingsRoute.route)))
                                 ),
-                                chosenTab = application.chosenTab.value,
+                                chosenTab = settingsVM.chosenTab.value,
                                 navController = navController,
                                 modifier = Modifier,
                                 snackbarController = snackbarController,
                                 snackbarHostState = snackbarHostState
                             ) { idx ->
-                                application.chosenTab.value = idx
+                                settingsVM.chosenTab.value = idx
                             }
                         } else {
                             ModernBottomNavigationBar(
                                 items = listOf(
                                     BottomNavItem(name = Routes.TimerRoute.route, route = Routes.TimerRoute.route,
-                                        image = painterResource(iconSizePicker(application.iconSize.value, Routes.TimerRoute.route))),
+                                        image = painterResource(iconSizePicker(settingsVM.iconSize.value, Routes.TimerRoute.route))),
                                     BottomNavItem(name = Routes.TimerListRoute.route, route = Routes.TimerListRoute.route,
-                                        image = painterResource(iconSizePicker(application.iconSize.value, Routes.TimerListRoute.route)))
+                                        image = painterResource(iconSizePicker(settingsVM.iconSize.value, Routes.TimerListRoute.route)))
                                 ),
-                                chosenTab = application.chosenTab.value,
-                                iconSize = application.iconSize.value,
+                                chosenTab = settingsVM.chosenTab.value,
+                                iconSize = settingsVM.iconSize.value,
                                 navController = navController,
                                 snackbarController = snackbarController,
                                 snackbarHostState = snackbarHostState
                             ){ idx ->
-                                application.chosenTab.value = idx
+                                settingsVM.chosenTab.value = idx
                             }
                         }
 
                     }
                 ){
                     Navigation(
-                        app = application,
-                        vm = vm,
+                        counterVM = counterVM,
+                        settingsVM = settingsVM,
                         navController = navController,
                         snackbarController = snackbarController,
                         snackbarHostState = snackbarHostState)

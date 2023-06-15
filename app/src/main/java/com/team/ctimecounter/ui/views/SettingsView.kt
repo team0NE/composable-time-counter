@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.team.ctimecounter.R
-import com.team.ctimecounter.ui.BaseApplication
 import com.team.ctimecounter.ui.components.AlertComponent
 import com.team.ctimecounter.ui.components.DisplayThemeSpinnerComponent
 import com.team.ctimecounter.ui.components.NavIconSizeSpinnerComponent
@@ -27,7 +26,7 @@ import com.team.ctimecounter.ui.components.TimeChainComponent
 import com.team.ctimecounter.ui.util.chooseInfoImage
 
 @Composable
-fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
+fun SettingsView(settingsVM: SettingsVM, showSnackbar: (String) -> Unit) {
 
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
@@ -35,6 +34,7 @@ fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
         val (themeLabel, themeSpinner, chainLabel, timeChainSpinner, infoBTN,
             sizeLabel, sizeSpinner, navLabel, navSpinner) = createRefs()
         val showDialog = remember { mutableStateOf(false) }
+
         if (showDialog.value) {
             AlertComponent(msg = "The time chain is used when it is necessary to repeat the specified time n times",
                 showDialog = showDialog.value,
@@ -52,15 +52,15 @@ fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
                 })
-        DisplayThemeSpinnerComponent(app.isDark.value, parentOptions = listOf("DarkTheme", "LightTheme"),
+        DisplayThemeSpinnerComponent(settingsVM.isDark.value, parentOptions = listOf("DarkTheme", "LightTheme"),
             modifier = Modifier
                 .padding(start = 8.dp)
                 .constrainAs(themeSpinner) {
                     start.linkTo(parent.start)
                     top.linkTo(themeLabel.bottom)
-                }) {theme ->
-                app.switchTheme(theme, false)
-        }
+                }) { theme ->
+                    settingsVM.switchTheme(theme)
+                }
         Text(text = stringResource(id = R.string.app_chain_label),
             style = TextStyle(
                 fontSize = 24.sp,
@@ -73,7 +73,7 @@ fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
                     top.linkTo(themeSpinner.bottom)
                 })
 
-        Image(painter = painterResource(chooseInfoImage(app.isDark.value)),
+        Image(painter = painterResource(chooseInfoImage(settingsVM.isDark.value)),
             contentDescription = "",
             modifier = Modifier
                 .padding(start = 8.dp)
@@ -110,15 +110,15 @@ fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
                     start.linkTo(parent.start)
                     top.linkTo(timeChainSpinner.bottom)
                 })
-        NavIconSizeSpinnerComponent(iconSize = app.iconSize.value,
+        NavIconSizeSpinnerComponent(iconSize = settingsVM.iconSize.value,
             modifier = Modifier
             .padding(start = 8.dp, top = 8.dp)
             .constrainAs(sizeSpinner) {
                 start.linkTo(parent.start)
                 top.linkTo(sizeLabel.bottom)
-            }) {iconSize ->
-            app.switchIconSize(iconSize, false)
-        }
+            }) { iconSize ->
+                settingsVM.switchIconSize(iconSize)
+            }
         // add bottom bar view chooser -> classic(3 routes), modern(2 buttons + centered fab)
         Text(text = stringResource(id = R.string.app_navigation_view_label),
             style = TextStyle(
@@ -131,14 +131,18 @@ fun SettingsView(app: BaseApplication, showSnackbar: (String) -> Unit) {
                     start.linkTo(parent.start)
                     top.linkTo(sizeSpinner.bottom)
                 })
-        NavViewSpinnerComponent(navigationView = app.navigationView.value, modifier = Modifier
+        NavViewSpinnerComponent(navigationView = settingsVM.navigationView.value, modifier = Modifier
             .padding(start = 8.dp, top = 8.dp)
             .constrainAs(navSpinner) {
                 start.linkTo(parent.start)
                 top.linkTo(navLabel.bottom)
             }) { navView ->
-            app.switchNavigationView(navView, false)
-        }
+                settingsVM.switchNavigationView(navView)
+            }
         // IMPORTANT Todo set settingsVM to NOT pass app trough constructor
+        //Pass ViewModel to child composables is a BAD practice.
+        // You have to pass only values and callbacks that you need to avoid unnecessary recompositions and make your composables more reusable.
+
+        //Todo Look if passable use common composable for 3 Spinners(Theme, IconSize and NavView)
     }
 }

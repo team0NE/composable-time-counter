@@ -16,3 +16,9 @@ val savingThemeKey = stringPreferencesKey(STATE_KEY_THEME)
 val savingIconSizeKey = stringPreferencesKey(STATE_KEY_ICON_SIZE)
 // it can be "Classic" or "Modern"
 val savingNavigationViewKey = stringPreferencesKey(STATE_KEY_NAVIGATION_VIEW)
+
+sealed class UpdateKey {
+    object ThemeKey: UpdateKey()
+    object SizeKey: UpdateKey()
+    object NavKey: UpdateKey()
+}
