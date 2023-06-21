@@ -14,6 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.team.ctimecounter.R
 import com.team.ctimecounter.ui.components.CounterListItem
 
@@ -21,15 +22,19 @@ import com.team.ctimecounter.ui.components.CounterListItem
 fun CounterListView(listVM: CounterListVM) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (list, btn) = createRefs()
-        val bottomGuideLine = createGuidelineFromBottom(.3f)
-        val bottomBoarderGuideLine = createGuidelineFromBottom(.15f)
+        val bottomGuideLine = createGuidelineFromBottom(.12f)
 
-        LazyColumn(modifier = Modifier.constrainAs(list){
-            start.linkTo(parent.start)
-            top.linkTo(parent.top)
-            end.linkTo(parent.end)
-            bottom.linkTo(bottomGuideLine)
-        }) {
+        LazyColumn(modifier = Modifier
+            .padding(top = 4.dp)
+            .constrainAs(list){
+                start.linkTo(parent.start)
+                top.linkTo(parent.top)
+                end.linkTo(parent.end)
+                bottom.linkTo(bottomGuideLine)
+
+                height = Dimension.fillToConstraints
+        }
+        ) {
             items(listVM.countersViewList) { itm ->
                 CounterListItem(isFinished = itm.isFinished, time = listVM.convertToString(itm.time))
             }
@@ -38,13 +43,13 @@ fun CounterListView(listVM: CounterListVM) {
         Button(onClick =  listVM::toggleCounter, modifier = Modifier
             .requiredHeight(64.dp)
             .requiredWidth(96.dp)
-            .padding(8.dp)
+            .padding(end = 8.dp, bottom = 16.dp)
             .constrainAs(btn) {
                 end.linkTo(parent.end)
-                bottom.linkTo(bottomBoarderGuideLine)
+                bottom.linkTo(bottomGuideLine)
             }) {
             val img = if (listVM.isTimerRunning.value) {
-                painterResource(R.drawable.ic_pause_24)
+                painterResource(R.drawable.ic_reset_whie_24)
             } else {
                 painterResource(R.drawable.ic_play_24)
             }
@@ -61,3 +66,5 @@ modifier = Modifier.constrainAs(div) {
 color = Color.Blue,
 thickness = 1.dp)
 */
+
+// Todo create position holder for large list(count > 5)
