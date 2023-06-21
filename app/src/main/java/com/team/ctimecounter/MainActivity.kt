@@ -23,6 +23,7 @@ import com.team.ctimecounter.navigation.Routes
 import com.team.ctimecounter.ui.theme.CTimeCounterTheme
 import com.team.ctimecounter.ui.util.SnackbarController
 import com.team.ctimecounter.ui.util.iconSizePicker
+import com.team.ctimecounter.ui.views.CounterListVM
 import com.team.ctimecounter.ui.views.CounterVM
 import com.team.ctimecounter.ui.views.SettingsVM
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val counterVM: CounterVM by viewModels()
+            val counterListVM: CounterListVM by viewModels()
             val settingsVM: SettingsVM by viewModels()
             val snackbarHostState = remember { SnackbarHostState() }
             val navController = rememberNavController()
@@ -57,9 +59,7 @@ class MainActivity : ComponentActivity() {
                                 ),
                                 chosenTab = settingsVM.chosenTab.value,
                                 navController = navController,
-                                modifier = Modifier,
-                                snackbarController = snackbarController,
-                                snackbarHostState = snackbarHostState
+                                modifier = Modifier
                             ) { idx ->
                                 settingsVM.chosenTab.value = idx
                             }
@@ -73,9 +73,7 @@ class MainActivity : ComponentActivity() {
                                 ),
                                 chosenTab = settingsVM.chosenTab.value,
                                 iconSize = settingsVM.iconSize.value,
-                                navController = navController,
-                                snackbarController = snackbarController,
-                                snackbarHostState = snackbarHostState
+                                navController = navController
                             ){ idx ->
                                 settingsVM.chosenTab.value = idx
                             }
@@ -85,6 +83,7 @@ class MainActivity : ComponentActivity() {
                 ){
                     Navigation(
                         counterVM = counterVM,
+                        counterListVM = counterListVM,
                         settingsVM = settingsVM,
                         navController = navController,
                         snackbarController = snackbarController,
