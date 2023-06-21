@@ -34,7 +34,9 @@ fun Navigation(counterVM: CounterVM,
                settingsVM: SettingsVM,
                navController: NavHostController,
                snackbarController: SnackbarController,
-               snackbarHostState: SnackbarHostState){
+               snackbarHostState: SnackbarHostState,
+               onKeyBord: () -> Unit
+){
     NavHost(navController = navController, startDestination = Routes.TimerRoute.route) {
         composable(route=Routes.TimerRoute.route) {
             CounterView(counterVM) { actionName ->
@@ -64,14 +66,9 @@ fun Navigation(counterVM: CounterVM,
             CounterListView(listVM = counterListVM)
         }
         composable(route = Routes.SettingsRoute.route) {
-            SettingsView(settingsVM = settingsVM) { testValue ->
-                snackbarController.getScope().launch {
-                    snackbarController.showSnackbar(
-                        snackbarHostState = snackbarHostState,
-                        message = "Test value is: $testValue",
-                        actionLabel = "Ok"
-                    )
-                }
+            SettingsView(settingsVM = settingsVM) { newChain ->
+                counterListVM.updateList(newChain)
+                onKeyBord()
             }
         }
     }

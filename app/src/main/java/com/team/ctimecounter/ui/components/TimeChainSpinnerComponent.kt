@@ -10,13 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.team.ctimecounter.ui.util.chooseIndex
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimeChainSpinnerComponent(modifier: Modifier, onItemClick: (String?) -> Unit) {
-    val parentOptions = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+fun TimeChainSpinnerComponent(multiplier:String, modifier: Modifier, onItemClick: (String?) -> Unit) {
+    val parentOptions = listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
     val expandedState = remember { mutableStateOf(false) }
-    val selectedOption = remember { mutableStateOf(parentOptions[0]) }
+    val selectedOption = remember { mutableStateOf(chooseIndex(parentOptions, multiplier)) }
 
     ExposedDropdownMenuBox(expanded = expandedState.value, onExpandedChange = {
         expandedState.value = !expandedState.value
@@ -32,10 +33,10 @@ fun TimeChainSpinnerComponent(modifier: Modifier, onItemClick: (String?) -> Unit
         ExposedDropdownMenu(expanded = expandedState.value, onDismissRequest = {expandedState.value = false}) {
             parentOptions.forEach { option ->
                 DropdownMenuItem(text = {
-                    Text(text = option.toString())
+                    Text(text = option)
                 }, onClick = {
-                    selectedOption.value = option
-                    onItemClick(option.toString())
+                    selectedOption.value = option.toInt()
+                    onItemClick(option)
                     expandedState.value = false
                 })
             }

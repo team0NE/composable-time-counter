@@ -7,18 +7,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.team.ctimecounter.data.CounterItem
-import com.team.ctimecounter.ui.BaseApplication
 import com.team.ctimecounter.utils.PrefsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CounterListVM
 @Inject constructor
-(app: BaseApplication, private val prefsManager: PrefsManager): ViewModel() {
+(private val prefsManager: PrefsManager): ViewModel() {
     // mutableStateListOf used to show changed values in the list
     val countersViewList = mutableStateListOf<CounterItem>()
     // it's a shadow list to go through the countdown
@@ -31,15 +31,9 @@ class CounterListVM
     init {
         viewModelScope.launch {
             // get saved string from dataStore
-            val temp = "2x5"
-//            val temp: String = prefsManager.getSavedTime().first().toString() ?: "2x35"
+            val temp = prefsManager.getSavedChain().first() ?: "1x1"
             // split string by x
-            val timeList = temp.split("x")
-            // rebuild func for view list
-            minutes.value = timeList[1].toInt()
-            multiplier.value = timeList[0].toInt()
-            // list changes
-            initList()
+            updateList(temp)
         }
     }
 
@@ -62,9 +56,12 @@ class CounterListVM
 
         return "$minuteStr:$secondStr"
     }
-    private fun initList() {
-        val value = multiplier.value
-        repeat((0 until value).count()) {
+    private fun refreshList() {
+        countersViewList.removeAll(countersViewList)
+        counterList.removeAll(counterList)
+
+        val multiplierCount = multiplier.value
+        repeat((0 until multiplierCount).count()) {
             val counterItem = CounterItem(isFinished = minutes.value == 0, time = minutes.value)
             countersViewList.add(counterItem)
             counterList.add(counterItem)
@@ -107,5 +104,15 @@ class CounterListVM
             countersViewList[idx] = countersViewList[idx].copy(isFinished = false)
             countersViewList[idx] = countersViewList[idx].copy(time = minutes.value)
         }
+    }
+
+    fun updateList(newChain: String) {
+        // split string by x
+        val timeList = newChain.split("x")
+        // rebuild func for view list
+        minutes.value = timeList[1].toInt()
+        multiplier.value = timeList[0].toInt()
+        // list changes
+        refreshList()
     }
 }

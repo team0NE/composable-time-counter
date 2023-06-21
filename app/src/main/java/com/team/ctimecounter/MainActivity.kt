@@ -22,6 +22,7 @@ import com.team.ctimecounter.navigation.Navigation
 import com.team.ctimecounter.navigation.Routes
 import com.team.ctimecounter.ui.theme.CTimeCounterTheme
 import com.team.ctimecounter.ui.util.SnackbarController
+import com.team.ctimecounter.ui.util.hideKeyboard
 import com.team.ctimecounter.ui.util.iconSizePicker
 import com.team.ctimecounter.ui.views.CounterListVM
 import com.team.ctimecounter.ui.views.CounterVM
@@ -87,7 +88,9 @@ class MainActivity : ComponentActivity() {
                         settingsVM = settingsVM,
                         navController = navController,
                         snackbarController = snackbarController,
-                        snackbarHostState = snackbarHostState)
+                        snackbarHostState = snackbarHostState) {
+                            hideKeyboard(this)
+                    }
                 }
             }
         }

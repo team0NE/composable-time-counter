@@ -30,9 +30,6 @@ fun CounterListView(listVM: CounterListVM) {
             end.linkTo(parent.end)
             bottom.linkTo(bottomGuideLine)
         }) {
-//            itemsIndexed(items = listVM.countersList) { _, itm ->
-//                CounterListItem(isFinished = itm.isFinished, time = listVM.convertToString(itm.time))
-//            }
             items(listVM.countersViewList) { itm ->
                 CounterListItem(isFinished = itm.isFinished, time = listVM.convertToString(itm.time))
             }
