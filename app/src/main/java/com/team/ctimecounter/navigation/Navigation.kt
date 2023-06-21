@@ -20,6 +20,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.team.ctimecounter.ui.util.SnackbarController
 import com.team.ctimecounter.ui.util.iconSizePicker
+import com.team.ctimecounter.ui.views.CounterListVM
+import com.team.ctimecounter.ui.views.CounterListView
 import com.team.ctimecounter.ui.views.CounterVM
 import com.team.ctimecounter.ui.views.CounterView
 import com.team.ctimecounter.ui.views.SettingsVM
@@ -28,10 +30,13 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Navigation(counterVM: CounterVM,
+               counterListVM: CounterListVM,
                settingsVM: SettingsVM,
                navController: NavHostController,
                snackbarController: SnackbarController,
-               snackbarHostState: SnackbarHostState){
+               snackbarHostState: SnackbarHostState,
+               onKeyBord: () -> Unit
+){
     NavHost(navController = navController, startDestination = Routes.TimerRoute.route) {
         composable(route=Routes.TimerRoute.route) {
             CounterView(counterVM) { actionName ->
@@ -57,15 +62,13 @@ fun Navigation(counterVM: CounterVM,
                 }
             }
         }
+        composable(route = Routes.TimerListRoute.route) {
+            CounterListView(listVM = counterListVM)
+        }
         composable(route = Routes.SettingsRoute.route) {
-            SettingsView(settingsVM = settingsVM) { testValue ->
-                snackbarController.getScope().launch {
-                    snackbarController.showSnackbar(
-                        snackbarHostState = snackbarHostState,
-                        message = "Test value is: $testValue",
-                        actionLabel = "Ok"
-                    )
-                }
+            SettingsView(settingsVM = settingsVM) { newChain ->
+                counterListVM.updateList(newChain)
+                onKeyBord()
             }
         }
     }
@@ -76,8 +79,6 @@ fun ClassicBottomNavigationBar(items: List<BottomNavItem>,
                                chosenTab: Int,
                                navController: NavHostController,
                                modifier: Modifier,
-                               snackbarController: SnackbarController,
-                               snackbarHostState: SnackbarHostState,
                                onTabSelected: (Int) -> Unit
 ) {
     val selectedItem = remember { mutableStateOf(chosenTab) }
@@ -90,19 +91,9 @@ fun ClassicBottomNavigationBar(items: List<BottomNavItem>,
             NavigationBarItem(
                 selected = selectedItem.value == index,
                 onClick = {
-                    if (index == 1) {
-                        snackbarController.getScope().launch {
-                            snackbarController.showSnackbar(
-                                snackbarHostState = snackbarHostState,
-                                message = "This feature is under construction",
-                                actionLabel = "Ok"
-                            )
-                        }
-                    } else {
-                        selectedItem.value = index
-                        navController.navigate(item.route)
-                        onTabSelected(index)
-                    }
+                    selectedItem.value = index
+                    navController.navigate(item.route)
+                    onTabSelected(index)
                 },
                 icon = {
                     Image(
@@ -119,8 +110,6 @@ fun ModernBottomNavigationBar(items: List<BottomNavItem>,
                               chosenTab: Int,
                                iconSize: String,
                                navController: NavHostController,
-                               snackbarController: SnackbarController,
-                               snackbarHostState: SnackbarHostState,
                                onTabSelected: (Int) -> Unit
 ) {
     val selectedItem = remember { mutableStateOf(chosenTab) }
@@ -130,19 +119,9 @@ fun ModernBottomNavigationBar(items: List<BottomNavItem>,
             NavigationBarItem(
                 selected = selectedItem.value == index,
                 onClick = {
-                    if (index == 1) {
-                        snackbarController.getScope().launch {
-                            snackbarController.showSnackbar(
-                                snackbarHostState = snackbarHostState,
-                                message = "This feature is under construction",
-                                actionLabel = "Ok"
-                            )
-                        }
-                    } else {
-                        selectedItem.value = index
-                        navController.navigate(item.route)
-                        onTabSelected(index)
-                    }
+                    selectedItem.value = index
+                    navController.navigate(item.route)
+                    onTabSelected(index)
                 },
                 icon = {
                     Image(

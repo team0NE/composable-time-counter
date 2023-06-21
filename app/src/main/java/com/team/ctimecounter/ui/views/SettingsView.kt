@@ -26,7 +26,7 @@ import com.team.ctimecounter.ui.components.TimeChainComponent
 import com.team.ctimecounter.ui.util.chooseInfoImage
 
 @Composable
-fun SettingsView(settingsVM: SettingsVM, showSnackbar: (String) -> Unit) {
+fun SettingsView(settingsVM: SettingsVM, onChainTimeChanged: (String) -> Unit) {
 
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
@@ -88,6 +88,8 @@ fun SettingsView(settingsVM: SettingsVM, showSnackbar: (String) -> Unit) {
         )
 
         TimeChainComponent(
+            vMultiplier = settingsVM.chainTime.value.split("x")[0],
+            vTime = settingsVM.chainTime.value.split("x")[1],
             modifier = Modifier
                 .padding(start = 8.dp)
                 .fillMaxWidth(.9f)
@@ -95,8 +97,9 @@ fun SettingsView(settingsVM: SettingsVM, showSnackbar: (String) -> Unit) {
                     start.linkTo(parent.start)
                     top.linkTo(chainLabel.bottom)
                 }) { timeChain ->
-            showSnackbar(timeChain.toString())
             // save time chain to dataStore
+            settingsVM.setChainTime(timeChain ?: "1x1")
+            onChainTimeChanged(timeChain ?: "1x1")
         }
         // Add bottom bar icon size picker 24-36-48
         Text(text = stringResource(id = R.string.app_icon_size_label),

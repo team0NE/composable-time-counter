@@ -30,10 +30,10 @@ fun CounterView(vm: CounterVM, showSnackBar: (action: String) -> Unit) {
         val bottomGuideLine = createGuidelineFromBottom(.15f)
 
         Text(text = vm.sepView.value,
-            style = TextStyle(
-                fontSize = 96.sp,
-                fontWeight = FontWeight.Bold
-            ),
+                style = TextStyle(
+                    fontSize = 96.sp,
+                    fontWeight = FontWeight.Bold
+                ),
             modifier = Modifier
                 .constrainAs(sep) {
                     visibility = if (vm.isSepShown.value) Visibility.Visible else Visibility.Invisible
@@ -130,4 +130,4 @@ fun CounterView(vm: CounterVM, showSnackBar: (action: String) -> Unit) {
     }
 }
 
-// fix minus glitch
+// Todo fix minus glitch with the job

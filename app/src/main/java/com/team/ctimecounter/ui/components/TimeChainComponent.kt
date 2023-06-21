@@ -19,11 +19,11 @@ import com.team.ctimecounter.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimeChainComponent(modifier: Modifier, onSaveClick: (String?) -> Unit) {
-    val multiplier = remember {mutableStateOf("1")}
-    val time = remember {mutableStateOf("1")}
+fun TimeChainComponent(vMultiplier: String, vTime: String, modifier: Modifier, onSaveClick: (String?) -> Unit) {
+    val multiplier = remember {mutableStateOf(vMultiplier)}
+    val time = remember {mutableStateOf(vTime)}
     Row(modifier = modifier) {
-        TimeChainSpinnerComponent(modifier = Modifier.width(100.dp)) { multValue ->
+        TimeChainSpinnerComponent(multiplier = vMultiplier, modifier = Modifier.width(100.dp)) { multValue ->
             multValue?.let { value ->
                 multiplier.value = value
             } ?: "0"

@@ -43,6 +43,12 @@ class PrefsManager constructor(app: Application) {
         }
     }
 
+    suspend fun saveChainTime(chain: String) {
+        dataStore.edit { pref ->
+            pref[savingChainTimeKey] = chain
+        }
+    }
+
     fun getSavedTheme(): Flow<String?> {
         return dataStore.data.map { pref ->
             val theme = pref[savingThemeKey] ?: "LightTheme"
@@ -59,6 +65,13 @@ class PrefsManager constructor(app: Application) {
         return dataStore.data.map { pref ->
             val iconSize = pref[savingNavigationViewKey] ?: "Classic"
             iconSize
+        }
+    }
+
+    fun getSavedChain(): Flow<String?> {
+        return dataStore.data.map { pref ->
+            val chainTime = pref[savingChainTimeKey] ?: "1x1"
+            chainTime
         }
     }
 }

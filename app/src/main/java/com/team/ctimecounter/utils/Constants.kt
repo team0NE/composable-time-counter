@@ -7,6 +7,7 @@ const val TAG = "AppDebug"
 const val SHARED_PREF_KEY = "shared_prefs"
 const val STATE_KEY_TIME = "state.time.key"
 const val STATE_KEY_THEME = "state.theme.key"
+const val STATE_KEY_CHAIN = "state.chain.key"
 const val STATE_KEY_ICON_SIZE = "state.icon.size.key"
 const val STATE_KEY_NAVIGATION_VIEW = "state.navigation.view.key"
 val savingTimeKey = intPreferencesKey(STATE_KEY_TIME)
@@ -14,6 +15,8 @@ val savingTimeKey = intPreferencesKey(STATE_KEY_TIME)
 val savingThemeKey = stringPreferencesKey(STATE_KEY_THEME)
 // it can be "Small", "Medium" or "Large"
 val savingIconSizeKey = stringPreferencesKey(STATE_KEY_ICON_SIZE)
+// it can be only string formatted as "MultiplierXTime"
+val savingChainTimeKey = stringPreferencesKey(STATE_KEY_CHAIN)
 // it can be "Classic" or "Modern"
 val savingNavigationViewKey = stringPreferencesKey(STATE_KEY_NAVIGATION_VIEW)
 

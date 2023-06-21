@@ -23,15 +23,19 @@ class SettingsVM
     var isDark: MutableState<Boolean> = mutableStateOf(false)
     val iconSize = mutableStateOf("Small")
     val navigationView = mutableStateOf("Classic")
+    val chainTime = mutableStateOf("1x1")
 
     init {
         viewModelScope.launch {
             val theme = prefsManager.getSavedTheme().first() ?: "LightTheme"
             val iconSize = prefsManager.getSavedIconSize().first() ?: "Medium"
             val navView = prefsManager.getSavedNavigationView().first() ?: "Classic"
+            val initialChain = prefsManager.getSavedChain().first() ?: "1x1"
+
             switchTheme(theme)
             switchIconSize(iconSize)
             switchNavigationView(navView)
+            setChainTime(initialChain)
         }
     }
 
@@ -57,5 +61,12 @@ class SettingsVM
             prefsManager.saveNavigationView(view)
         }
         app.updateView(UpdateKey.NavKey, view)
+    }
+
+    fun setChainTime(chain: String) {
+        chainTime.value = chain
+        viewModelScope.launch {
+            prefsManager.saveChainTime(chain)
+        }
     }
  }
